@@ -46,6 +46,10 @@ public class ConnectionEstablishPhoneMessage extends ClientMessage implements Ae
 	public short getProtocolVersion() {
 		return this.mProtocolVersion;
 	}
+	
+	public void setProtocolVersion(final short pProtocolVersion) {
+		this.mProtocolVersion = pProtocolVersion;
+	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces

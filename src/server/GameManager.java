@@ -162,7 +162,7 @@ private static final int SERVER_PORT = 5555;
 					}
 				});
 				
-				connector.registerClientMessage(FLAG_MESSAGE_SERVER_GAME_START, GameStartPhoneMessage.class, new IClientMessageHandler<SocketConnection>()
+				connector.registerClientMessage(FLAG_MESSAGE_PHONE_GAME_START, GameStartPhoneMessage.class, new IClientMessageHandler<SocketConnection>()
 				{
 					@Override
 					public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException 
