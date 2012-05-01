@@ -124,7 +124,7 @@ private static final int SERVER_PORT = 5555;
 						System.out.println("Got single server request for " + desiredPlayers + " players.");
 						for(GameServer gs: myServers.values())
 						{
-							if((gs.getNumPlayers() < gs.getMaxPlayers()) && (gs.isGameActive() == false) && (gs.getMaxPlayers() == desiredPlayers))
+							if((gs.getNumPlayers() < gs.getMaxPlayers()) && (gs.getMaxPlayers() == desiredPlayers))
 							{
 								final FreeServerMatchmakerMessage freeServerMatchmakerMessage = (FreeServerMatchmakerMessage) pool.obtainMessage(FLAG_MESSAGE_MATCHMAKER_FREE_SERVER);
 								freeServerMatchmakerMessage.setServer(gs);
@@ -157,8 +157,7 @@ private static final int SERVER_PORT = 5555;
 					{
 						final CurrentPlayerCountPhoneMessage currentPlayerCountPhoneMessage = (CurrentPlayerCountPhoneMessage)pClientMessage;
 						myServers.get(currentPlayerCountPhoneMessage.mServer.getMyIP()).setNumPlayers(currentPlayerCountPhoneMessage.mServer.getNumPlayers());
-						System.out.println("Got player count request on this server: " + myServers.get(currentPlayerCountPhoneMessage.mServer.getMyIP()));
-						System.out.println("Sent back player count of " + myServers.get(currentPlayerCountPhoneMessage.mServer.getMyIP()).getNumPlayers());
+						System.out.println("Set player count on this server: " + myServers.get(currentPlayerCountPhoneMessage.mServer.getMyIP()));
 					}
 				});
 				
@@ -168,8 +167,8 @@ private static final int SERVER_PORT = 5555;
 					public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException 
 					{
 						final GameStartPhoneMessage gameStartPhoneMessage = (GameStartPhoneMessage)pClientMessage;
-						myServers.get(gameStartPhoneMessage.mServer.getMyIP()).setGameActive(true);
 						System.out.println("Got game start message for server " + myServers.get(gameStartPhoneMessage.mServer.getMyIP()));
+						myServers.remove(gameStartPhoneMessage.mServer.getMyIP()); // remove this from the list
 					}
 				});
 				

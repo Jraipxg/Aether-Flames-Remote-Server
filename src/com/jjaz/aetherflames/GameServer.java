@@ -12,10 +12,9 @@ public class GameServer implements Serializable
 	 */
 	private static final long serialVersionUID = 17680176284646976L; // (j * j * a * z)^2
 	private String myIP;
-	private String myName;
-	private int numPlayers;
-	private int maxPlayers;
-	private boolean gameActive;
+	private String myName; // human-readable name for server
+	private int numPlayers; // current number of players
+	private int maxPlayers; // max allowable number of players
 	
 	public GameServer(String ip, String name, int max)
 	{
@@ -23,7 +22,6 @@ public class GameServer implements Serializable
 		myName = name;
 		maxPlayers = max;
 		numPlayers = 1;
-		gameActive = false;
 	}
 	
 	public void setMyIP(String myIP) {
@@ -57,12 +55,6 @@ public class GameServer implements Serializable
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
-	public void setGameActive(boolean gameActive) {
-		this.gameActive = gameActive;
-	}
-	public boolean isGameActive() {
-		return gameActive;
-	}
 	
 	/**
 	 * De-serialize using default reader.
@@ -84,7 +76,7 @@ public class GameServer implements Serializable
 	
 	public String toString()
 	{
-		return myName + "|" + myIP + "|" + numPlayers + "|" + maxPlayers + "|" + gameActive;
+		return myName + "|" + myIP + "|" + numPlayers + "|" + maxPlayers;
 	}
 	
 }
