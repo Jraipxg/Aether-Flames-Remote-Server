@@ -134,6 +134,11 @@ private static final int SERVER_PORT = 5555;
 								break;
 							}
 						}
+						// did not find a server, fail
+						final NoServerFoundMatchmakerMessage noServerFoundMessage = (NoServerFoundMatchmakerMessage) pool.obtainMessage(FLAG_MESSAGE_MATCHMAKER_NO_SERVER_FOUND);
+						pClientConnector.sendServerMessage(noServerFoundMessage);
+						pool.recycleMessage(noServerFoundMessage);
+						System.out.println("Send back no server found.");
 					}
 				});
 				
@@ -142,11 +147,18 @@ private static final int SERVER_PORT = 5555;
 					@Override
 					public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException 
 					{
-						final ServerListMatchmakerMessage serverListMatchmakerMessage = (ServerListMatchmakerMessage) pool.obtainMessage(FLAG_MESSAGE_MATCHMAKER_SERVER_LIST);
 						System.out.println("Got server list request.");
-						serverListMatchmakerMessage.setServerList(myServers);
-						pClientConnector.sendServerMessage(serverListMatchmakerMessage);
-						pool.recycleMessage(serverListMatchmakerMessage);
+						if (!myServers.isEmpty()) {
+							final ServerListMatchmakerMessage serverListMatchmakerMessage = (ServerListMatchmakerMessage) pool.obtainMessage(FLAG_MESSAGE_MATCHMAKER_SERVER_LIST);
+							serverListMatchmakerMessage.setServerList(myServers);
+							pClientConnector.sendServerMessage(serverListMatchmakerMessage);
+							pool.recycleMessage(serverListMatchmakerMessage);
+						} else { // no servers
+							final NoServerFoundMatchmakerMessage noServerFoundMessage = (NoServerFoundMatchmakerMessage) pool.obtainMessage(FLAG_MESSAGE_MATCHMAKER_NO_SERVER_FOUND);
+							pClientConnector.sendServerMessage(noServerFoundMessage);
+							pool.recycleMessage(noServerFoundMessage);
+							System.out.println("Send back no servers found.");
+						}
 					}
 				});
 				
@@ -185,6 +197,7 @@ private static final int SERVER_PORT = 5555;
 		this.pool.registerMessage(FLAG_MESSAGE_MATCHMAKER_CONNECTION_REJECTED_PROTOCOL_MISMATCH, ConnectionRejectedProtocolMismatchMatchmakerMessage.class);
 		this.pool.registerMessage(FLAG_MESSAGE_MATCHMAKER_FREE_SERVER, FreeServerMatchmakerMessage.class);
 		this.pool.registerMessage(FLAG_MESSAGE_MATCHMAKER_SERVER_LIST, ServerListMatchmakerMessage.class);
+		this.pool.registerMessage(FLAG_MESSAGE_MATCHMAKER_NO_SERVER_FOUND, NoServerFoundMatchmakerMessage.class);
 	}
 	
 
